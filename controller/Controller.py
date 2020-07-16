@@ -2,6 +2,7 @@ import os
 import sys
 import fnmatch
 from pathlib import Path
+import subprocess
 
 class Controller:
 
@@ -9,16 +10,15 @@ class Controller:
 
     def __init__(self,CurrentFile):
         self.CurrentFile = CurrentFile
-        self.checkCommand()
-        input("Press enter to exit")
-
+        out = self.checkCommand()
+        if not out:
+            print("Something went wrong, check the configuration file. I don't understand something there.")
 
     def checkCommand(self):
         command = sys.argv
 
         if len(command) == 1:
-            self.run()
-            return True
+            return self.run()
 
         if len(command) >= 2:
             if command[1] in self.COMMAND_LIST:
@@ -34,8 +34,6 @@ class Controller:
                                     config.write(row+"\n")
 
                 return True
-
-        print('[Command failed]')
         return False
 
 
@@ -43,15 +41,19 @@ class Controller:
         if Path(self.CurrentFile).exists():
             with open(self.CurrentFile,"r",encoding="utf8") as config:
                 data = config.read().replace("\n"," ").split("-p")
-                print(data)
                 for i,row in enumerate(data):
                     if i > 0:
                         if fnmatch.fnmatch(row, "*:/*") or fnmatch.fnmatch(row, "*:\\*"):
                             correctedSlash = row.replace("/","\\")
-                            os.system("explorer "+correctedSlash)
+                            subprocess.call("explorer "+correctedSlash, shell=True)
                         else:
-                            os.system(row)
+                            check = os.system(row)
+                            if check == 1:
+                                subprocess.call(f"start {row}",shell=True)
+                return True
+
         self.help()
+        return False
 
 
     def help(self):
@@ -66,3 +68,4 @@ To execute the startup app, don't pass any paramenters
 * make sure you have a StartupApps.config in the current directory,
 if you do not, create one by passing in parameters to this app.
         """)
+        input("Press enter to exit")
