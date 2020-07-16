@@ -10,6 +10,7 @@ class Controller:
     def __init__(self,CurrentFile):
         self.CurrentFile = CurrentFile
         self.checkCommand()
+        input("Press enter to exit")
 
 
     def checkCommand(self):
@@ -55,13 +56,13 @@ class Controller:
 
     def help(self):
         print("""
-        [-h] => Help
-        [-p] => Path to folder/executable/environment variable
-        
-        To pass multiple files/folder/etc, seperate the paths by "-p".
+[-h] => Help
+[-p] => Path to folder/executable/environment variable
 
-        To execute the startup app, don't pass any paramenters
+To pass multiple files/folder/etc, seperate the paths by "-p".
 
-        * make sure you have a StartupApps.config in the current directory,
-        if you do not, create one by passing in parameters to this app.
+To execute the startup app, don't pass any paramenters
+
+* make sure you have a StartupApps.config in the current directory,
+if you do not, create one by passing in parameters to this app.
         """)
