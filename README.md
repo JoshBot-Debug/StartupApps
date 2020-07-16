@@ -3,9 +3,9 @@ This programe was made to easily startup all the applications you use with one c
 
 # How to use
 
-0. Add startupapps to your path to make life more easy
+- Add startupapps to your path to make life more easy
 
-1. Set up a config file EXAMPLE : "startupapps -p chrome www.facebook.com -p code . -p C:/myfolder/files -p C:\somefolder\paint.exe"
+- Set up a config file EXAMPLE : "startupapps -c "chrome github.com" -c "C:\somefolder\paint.exe" -c "code ." -p "C:/myfolder/files"
 
 This will generate a config file in the folder you were in. For any urls, make sure you do not add "https://" or "http://"
 
