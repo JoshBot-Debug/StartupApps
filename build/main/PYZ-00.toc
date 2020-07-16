@@ -312,9 +312,9 @@
    'c:\\python38\\lib\\multiprocessing\\__init__.py',
    'PYMODULE'),
   ('os', 'c:\\python38\\lib\\os.py', 'PYMODULE'),
-  ('stringprep', 'c:\\python38\\lib\\stringprep.py', 'PYMODULE'),
   ('_py_abc', 'c:\\python38\\lib\\_py_abc.py', 'PYMODULE'),
   ('tracemalloc', 'c:\\python38\\lib\\tracemalloc.py', 'PYMODULE'),
+  ('stringprep', 'c:\\python38\\lib\\stringprep.py', 'PYMODULE'),
   ('controller.Controller',
    'C:\\Users\\Neelam Agneta Myers\\Desktop\\Joshua\\July 2020\\Python '
    'projects\\StartupApps\\controller\\Controller.py',

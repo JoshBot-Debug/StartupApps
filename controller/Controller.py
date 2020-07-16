@@ -54,6 +54,7 @@ class Controller:
                 config.append({"path":arg})
             elif opt in ("-c", "--command"):
                 config.append({"command":arg})
+        
 
         # By default, we create a new file and the name is the folder name
         answere = "w"
@@ -70,10 +71,7 @@ class Controller:
 
 
         with open(self.CurrentPath+"\\"+fileName,answere,encoding="utf8") as newConfig:
-            for row in config:
-                # Write the dict to the file, convert it to string
-                newConfig.write(str(row)+"\n")
-
+            json.dump(config, newConfig)
 
         print('Config file was generated successfully, you can edit it manually in notepad if you made a mistake ;) \n')
         input('Press any key to exit')
@@ -111,10 +109,14 @@ class Controller:
                 self.help()
 
         with open(self.CurrentPath+"\\"+configFileName,"r",encoding="utf8") as config:
-            newList = []
-            for row in config:
-                # Converts the data to a dictnary using the json module.
-                newList.append(json.loads(row.strip("\n").replace("'", "\"")))
+
+            try:
+                newList = json.loads(config.read())
+            except json.decoder.JSONDecodeError as e:
+                print(e)
+                print("Check your .stapps file, make sure all paths are escaped 'C:\\\\Users\\\\user\\\\' not 'C:\\Users\\user\\'")
+                print("Use double backslash not single backslash")
+                input("Press enter to exit")
 
             for row in newList:
                 try:

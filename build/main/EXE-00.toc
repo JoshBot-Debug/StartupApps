@@ -34,8 +34,8 @@
    'C:\\Users\\Neelam Agneta Myers\\Desktop\\Joshua\\July 2020\\Python '
    'projects\\StartupApps\\main.py',
    'PYSOURCE'),
-  ('python38.dll', 'c:\\python38\\python38.dll', 'BINARY'),
   ('VCRUNTIME140.dll', 'c:\\python38\\VCRUNTIME140.dll', 'BINARY'),
+  ('python38.dll', 'c:\\python38\\python38.dll', 'BINARY'),
   ('select', 'c:\\python38\\DLLs\\select.pyd', 'EXTENSION'),
   ('_overlapped', 'c:\\python38\\DLLs\\_overlapped.pyd', 'EXTENSION'),
   ('_ssl', 'c:\\python38\\DLLs\\_ssl.pyd', 'EXTENSION'),
@@ -50,8 +50,8 @@
   ('_ctypes', 'c:\\python38\\DLLs\\_ctypes.pyd', 'EXTENSION'),
   ('_multiprocessing', 'c:\\python38\\DLLs\\_multiprocessing.pyd', 'EXTENSION'),
   ('_socket', 'c:\\python38\\DLLs\\_socket.pyd', 'EXTENSION'),
-  ('libcrypto-1_1.dll', 'c:\\python38\\DLLs\\libcrypto-1_1.dll', 'BINARY'),
   ('libssl-1_1.dll', 'c:\\python38\\DLLs\\libssl-1_1.dll', 'BINARY'),
+  ('libcrypto-1_1.dll', 'c:\\python38\\DLLs\\libcrypto-1_1.dll', 'BINARY'),
   ('libffi-7.dll', 'c:\\python38\\DLLs\\libffi-7.dll', 'BINARY'),
   ('base_library.zip',
    'C:\\Users\\Neelam Agneta Myers\\Desktop\\Joshua\\July 2020\\Python '
@@ -65,7 +65,7 @@
  [],
  False,
  False,
- 1594907422,
+ 1594910707,
  [('run.exe',
    'c:\\python38\\lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit\\run.exe',
    'EXECUTABLE')])
