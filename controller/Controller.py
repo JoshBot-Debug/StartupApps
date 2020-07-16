@@ -1,71 +1,144 @@
 import os
-import sys
+import sys, getopt
 import fnmatch
 from pathlib import Path
 import subprocess
+from glob import glob
+from os import getcwd
+import json
 
 class Controller:
 
-    COMMAND_LIST = ["-h","-p"]
-
-    def __init__(self,CurrentFile):
-        self.CurrentFile = CurrentFile
-        out = self.checkCommand()
-        if not out:
+    def __init__(self):
+        self.CurrentPath = getcwd()
+        result = self.checkCommand(sys.argv[1:])
+        if not result:
             print("Something went wrong, check the configuration file. I don't understand something there.")
+        else:
+            sys.exit()
 
-    def checkCommand(self):
-        command = sys.argv
+    def getAnswere(self):
+        answere = ""
+        while True:
+            if answere.lower() == "a" or answere.lower() == "w" or answere.lower() == "n":
+                break
+            else:
+                answere = input("[a/w/n] : ")
+        return answere.lower()
 
-        if len(command) == 1:
-            return self.run()
 
-        if len(command) >= 2:
-            if command[1] in self.COMMAND_LIST:
+    def checkCommand(self,argv):
+        config = []
 
-                if command[1] == "-h":
-                    self.help()
+        # Setup the commands
+        try:
+            opts, args = getopt.getopt(argv,"hp:c:",["help","path=","command="])
+        except getopt.GetoptError:
+            print ('startupapps.exe -p <path/to/file/or/folder> -c <cmd that is in ENV PATH>')
+            sys.exit(2)
 
-                if command[1] == "-p":
-                    for i,pth in enumerate(command):
-                        if i > 1:
-                            with open(self.CurrentFile,"w",encoding="utf8") as config:
-                                for row in command:
-                                    config.write(row+"\n")
+       
+        if opts == []:
+            self.run()
+            return True
 
-                return True
-        return False
+        for opt, arg in opts:
+            if opt == '-h':
+                print ('startupapps.exe -p <path/to/file/or/folder> -c <cmd that is in ENV PATH>')
+                sys.exit()
+            elif opt in ("-p", "--path"):
+                config.append({"path":arg})
+            elif opt in ("-c", "--command"):
+                config.append({"command":arg})
+
+        # By default, we create a new file and the name is the folder name
+        answere = "w"
+        fileName = self.CurrentPath.split('\\')[-1:][0]+".stapps"
+
+        # If a config file exists, check append or overright
+        if Path(self.CurrentPath+"\\"+fileName).exists():
+            print(f"{fileName} already exists, would you like to overright[w], append[a] or create a new[n] file?")
+            answere = self.getAnswere()
+
+            if answere == "n":
+                fileName = input("[eg: myfile] : ")+".stapps"
+                answere = "w"
+
+
+        with open(self.CurrentPath+"\\"+fileName,answere,encoding="utf8") as newConfig:
+            for row in config:
+                # Write the dict to the file, convert it to string
+                newConfig.write(str(row)+"\n")
+
+
+        print('Config file was generated successfully, you can edit it manually in notepad if you made a mistake ;) \n')
+        input('Press any key to exit')
+        return True
+
+
+    def getFileChoice(self,listOfChoices):
+        answere = "999"
+        while True:
+            if answere not in str(listOfChoices):
+                answere = input('[Run] : ')
+            else:
+                break
+
+        return int(answere)
 
 
     def run(self):
-        if Path(self.CurrentFile).exists():
-            with open(self.CurrentFile,"r",encoding="utf8") as config:
-                data = config.read().replace("\n"," ").split("-p")
-                for i,row in enumerate(data):
-                    if i > 0:
-                        if fnmatch.fnmatch(row, "*:/*") or fnmatch.fnmatch(row, "*:\\*"):
-                            correctedSlash = row.replace("/","\\")
-                            subprocess.call("explorer "+correctedSlash, shell=True)
-                        else:
-                            check = os.system(row)
-                            if check == 1:
-                                subprocess.call(f"start {row}",shell=True)
-                return True
+        listOfFiles = glob("*.stapps")
 
-        self.help()
-        return False
+        if len(listOfFiles) > 1:
+            print(f'\n{len(listOfFiles)} config files exists in the directiory, Which one would you like to run? \n')
+
+            choices = []
+            for i,configFile in enumerate(listOfFiles):
+                print(f'[{i}] : {configFile}')
+                choices.append(i)
+            
+            configFileName = listOfFiles[self.getFileChoice(choices)]
+        else:
+            try:
+                configFileName = listOfFiles[0]
+            except IndexError:
+                print("Could not find a config file! First setup a config file, then run the app")
+                self.help()
+
+        with open(self.CurrentPath+"\\"+configFileName,"r",encoding="utf8") as config:
+            newList = []
+            for row in config:
+                # Converts the data to a dictnary using the json module.
+                newList.append(json.loads(row.strip("\n").replace("'", "\"")))
+
+            for row in newList:
+                try:
+                    command = row['command']
+                    check = os.system(command)
+                    if check == 1:
+                        subprocess.call(f"start {command}",shell=True)
+                except KeyError:
+                    pass
+
+                try:
+                    path = row['path'].replace("/","\\")
+                    subprocess.call("explorer "+path, shell=True)
+                except KeyError:
+                    pass
+
+        return True
 
 
     def help(self):
         print("""
 [-h] => Help
-[-p] => Path to folder/executable/environment variable
-
-To pass multiple files/folder/etc, seperate the paths by "-p".
+[-p] => Path to folder | eg: startupapps.exe -p "C:/path/to/folder/one" -p "C:/path/to/folder/two"
+[-c] => Path to executable/environment variable | eg: -c "python C:\folder\example.py" -c "code ." -c "chrome github.com"
 
 To execute the startup app, don't pass any paramenters
 
-* make sure you have a StartupApps.config in the current directory,
+* make sure you have a config.stapps in the current directory,
 if you do not, create one by passing in parameters to this app.
         """)
         input("Press enter to exit")
