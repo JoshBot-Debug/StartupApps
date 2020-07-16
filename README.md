@@ -7,6 +7,6 @@ This programe was made to easily startup all the applications you use with one c
 
 - Set up a config file EXAMPLE : "startupapps -c "chrome github.com" -c "C:\somefolder\paint.exe" -c "code ." -p "C:/myfolder/files"
 
-This will generate a config file in the folder you were in. For any urls, make sure you do not add "https://" or "http://"
+- This will generate a config file in the folder you were in. For any urls, make sure you do not add "https://" or "http://"
 
-2. After a config file has been generated, just run "startupapps" and all the applications specified in the config file will start.
+- After a config file has been generated, just run "startupapps" and all the applications specified in the config file will start.
