@@ -1,13 +1,16 @@
 import os
 import sys, getopt
 import fnmatch
-from pathlib import Path
 import subprocess
-from glob import glob
-from os import getcwd
 import json
 
+from pathlib import Path
+from glob import glob
+from os import getcwd
+
+
 class Controller:
+
 
     def __init__(self):
         self.CurrentPath = getcwd()
@@ -16,6 +19,7 @@ class Controller:
             print("Something went wrong, check the configuration file. I don't understand something there.")
         else:
             sys.exit()
+
 
     def getAnswere(self):
         answere = ""
