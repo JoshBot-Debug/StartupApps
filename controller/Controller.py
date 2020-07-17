@@ -17,8 +17,9 @@ class Controller:
         result = self.checkCommand(sys.argv[1:])
         if not result:
             print("Something went wrong, check the configuration file. I don't understand something there.")
-        else:
-            sys.exit()
+            input("Press enter to exit.")
+
+        sys.exit()
 
 
     def getAnswere(self):
@@ -36,7 +37,7 @@ class Controller:
 
         # Setup the commands
         try:
-            opts, args = getopt.getopt(argv,"hp:c:",["help","path=","command="])
+            opts, args = getopt.getopt(argv,"hp:c:t",["help","path=","command=","this"])
         except getopt.GetoptError:
             print ('startupapps.exe -p <path/to/file/or/folder> -c <cmd that is in ENV PATH>')
             sys.exit(2)
@@ -54,7 +55,8 @@ class Controller:
                 config.append({"path":arg})
             elif opt in ("-c", "--command"):
                 config.append({"command":arg})
-        
+            elif opt in ("-t", "--this"):
+                config.append({"path": self.CurrentPath})
 
         # By default, we create a new file and the name is the folder name
         answere = "w"
